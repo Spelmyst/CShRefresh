@@ -11,6 +11,7 @@ namespace Adventure
 		private string _CharName;
 		private int _Luck = 0;
 		private int _Credits = 0;
+		private List<_Item> _Inventory = new List<_Item>();
 
 		public void SetName()
 		{
@@ -33,19 +34,20 @@ namespace Adventure
 			return _Credits;
 		}
 
-		public void Lucky()
+		public void Lucky(int _Bonus)
 		{
 			Random _Rand = new Random();
 			int rnd = _Rand.Next(10);
 
-			if(rnd > 7)
+			if(rnd > 8)
 			{
 				_Luck++;
-			}
-
-			for(int a=0 ; a < _Luck ; a++)
-			{
-				_Credits += _Rand.Next(10);
+				Console.WriteLine("You got lucky.");
+				for(int a=0 ; a < (_Luck + _Bonus) ; a++)
+				{
+					_Credits += _Rand.Next(10);
+				}
+				Console.WriteLine("Credits: " + GetCredits());
 			}
 		}
 	}
@@ -55,6 +57,7 @@ namespace Adventure
         static void Main()
         {
 			int _Turns = 0;
+			char _Choice;
 
 			_Character Char = new _Character();
 
@@ -63,14 +66,22 @@ namespace Adventure
 			// Main Loop Start
 			while(!_Game._Over)
 			{
-				Char.Lucky();
 				Console.WriteLine("Turn Number: " + _Turns);
-				Console.WriteLine("Luck: " + Char.GetLuck());
-				Console.WriteLine("Credits: " + Char.GetCredits());
+				Console.WriteLine("What you like to do?");
+				Console.WriteLine("w) Wait , q) Quit");
+				_Choice = Console.ReadKey().KeyChar;
+				Console.WriteLine("\n");
 
-				if( _Turns > 18 )
+				switch(_Choice)
 				{
-					_Game._Over = true;
+					case 'q':
+						_Game._Over = true;
+						break;
+					case 'w':
+					default:
+						Console.WriteLine("Waiting");
+						Char.Lucky(1);
+						break;
 				}
 				_Turns++;
 			}
