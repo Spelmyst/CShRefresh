@@ -9,16 +9,44 @@ namespace Adventure
 	class _Character
 	{
 		private string _CharName;
+		private int _Luck = 0;
+		private int _Credits = 0;
 
-		public void _SetName()
+		public void SetName()
 		{
 			Console.WriteLine("What is your name?");
 			_CharName = Console.ReadLine();
 		}
 
-		public string _GetName()
+		public string GetName()
 		{
 			return _CharName;
+		}
+
+		public int GetLuck()
+		{
+			return _Luck;
+		}
+
+		public int GetCredits()
+		{
+			return _Credits;
+		}
+
+		public void Lucky()
+		{
+			Random _Rand = new Random();
+			int rnd = _Rand.Next(10);
+
+			if(rnd > 7)
+			{
+				_Luck++;
+			}
+
+			for(int a=0 ; a < _Luck ; a++)
+			{
+				_Credits += _Rand.Next(10);
+			}
 		}
 	}
 
@@ -26,17 +54,35 @@ namespace Adventure
     {
         static void Main()
         {
-			_Character _Char = new _Character();
+			int _Turns = 0;
 
-			_Game._SetupGame(_Char);
+			_Character Char = new _Character();
 
-			Console.WriteLine("Welcome "+ _Char._GetName() +" to "+ _Game._GetGameName() +". You will be exploring the fantastic world of SumDum. ");
-			//Console.ReadKey();
+			_Game._SetupGame(Char);
+
+			// Main Loop Start
+			while(!_Game._Over)
+			{
+				Char.Lucky();
+				Console.WriteLine("Turn Number: " + _Turns);
+				Console.WriteLine("Luck: " + Char.GetLuck());
+				Console.WriteLine("Credits: " + Char.GetCredits());
+
+				if( _Turns > 18 )
+				{
+					_Game._Over = true;
+				}
+				_Turns++;
+			}
+			// Main Loop End
+
+			Console.WriteLine("Looks like the game is over.");
         }       
     }
 
 	static class _Game
 	{
+		public static bool _Over = false;
 		private static string _GameName = "SumDum World";
 
 		public static string _GetGameName()
@@ -44,14 +90,22 @@ namespace Adventure
 			return _GameName;
 		}
 
-		public static void _SetupGame(_Character _Char)
+		public static void _SetupGame(_Character Char)
 		{
-			_Char._SetName();
+			Char.SetName();
+
+			Console.WriteLine("Welcome "+ Char.GetName() +" to "+ _Game._GetGameName() +". You will be exploring the fantastic world of SumDum. ");
 		}
+
+
 	}
 
 	class _Item
 	{
+		// Constructor
+		public _Item()
+		{
 
+		}
 	}
 }
