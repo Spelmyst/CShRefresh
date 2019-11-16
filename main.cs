@@ -1,3 +1,8 @@
+/*
+	Just we're clear. I am rather anal about openning an closing brackets.
+	They will be on separate line. That is my Pet Peeve.
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +16,7 @@ namespace Adventure
 		private string _CharName;
 		private int _Luck = 0;
 		private int _Credits = 0;
-		private List<_Item> _Inventory = new List<_Item>();
+		//private List<_Item> _Inventory = new List<_Item>();
 
 		public void SetName()
 		{
@@ -38,16 +43,20 @@ namespace Adventure
 		{
 			Random _Rand = new Random();
 			int rnd = _Rand.Next(10);
+			int _found = 0;
 
-			if(rnd > 8)
+			// 30% chance of getting lucky
+			if(rnd < 3)
 			{
 				_Luck++;
-				Console.WriteLine("You got lucky.");
-				for(int a=0 ; a < (_Luck + _Bonus) ; a++)
+				// Add some credits, compounded bonus.
+				for(int a=0 ; a < _Luck ; a++)
 				{
-					_Credits += _Rand.Next(10);
+					_found = _Rand.Next(3) + _Bonus;
 				}
-				Console.WriteLine("Credits: " + GetCredits());
+				Console.WriteLine("HEY! You found " + _found + " Credits.");
+				_Credits += _found;
+				Console.WriteLine("Credits: " + _Credits);
 			}
 		}
 	}
@@ -56,7 +65,7 @@ namespace Adventure
     {
         static void Main()
         {
-			int _Turns = 0;
+			int _Turns = 1;
 			char _Choice;
 
 			_Character Char = new _Character();
@@ -66,21 +75,25 @@ namespace Adventure
 			// Main Loop Start
 			while(!_Game._Over)
 			{
+				Console.WriteLine("\n");
 				Console.WriteLine("Turn Number: " + _Turns);
 				Console.WriteLine("What you like to do?");
-				Console.WriteLine("w) Wait , q) Quit");
-				_Choice = Console.ReadKey().KeyChar;
-				Console.WriteLine("\n");
+				Console.WriteLine("s) Search w) Wait , q) Quit");
+				_Choice = char.ToLower(Console.ReadKey().KeyChar);
 
 				switch(_Choice)
 				{
 					case 'q':
+						Console.WriteLine("uiting");
 						_Game._Over = true;
 						break;
-					case 'w':
-					default:
-						Console.WriteLine("Waiting");
+					case 's':
+						Console.WriteLine("earching. +1 Luck");
 						Char.Lucky(1);
+						break;
+					case 'w':
+						Console.WriteLine("aiting");
+						Char.Lucky(0);
 						break;
 				}
 				_Turns++;
